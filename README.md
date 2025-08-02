@@ -30,6 +30,8 @@ It is useful for validating memory ordering assumptions on your system and compi
 
 ## Findings
 
+### Apple M1 Pro
+
 We try different variations on an Apply M1 Pro chip.
 
 Here are versions that did not work:
@@ -49,6 +51,13 @@ Here are versions where **no** data race was detected:
 Performance-wise the versions with a `relaxed` first read run in 0.21 sec while the versions with an `acquire` first read run in 0.58 sec.
 
 These results seem strange. One would expect that with no enforced ordering at all, the compiler and cpu would be allowed to reorder loads before the first load or after the second load, resulting in race conditions. The first read might allow `relaxed` because it is immediately followed by a branch test based on the loaded value, so perhaps this disables speculative execution? But one should not count on that.
+
+### Intel x86
+
+We try different variations on an Intel Core i5-13600KF.
+
+In this test, there is **no** data race detected in any of the cases.
+All versions appear to have the same performance.
 
 ## Building
 
